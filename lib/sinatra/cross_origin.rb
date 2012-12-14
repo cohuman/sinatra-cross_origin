@@ -32,6 +32,10 @@ module Sinatra
         origin = settings.allow_origin == :any ? request.env['HTTP_ORIGIN'] : settings.allow_origin
         methods = settings.allow_methods.map{ |m| m.to_s.upcase! }.join(', ')
 
+        if requested_headers = env['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']
+          headers 'Access-Control-Allow-Headers' => requested_headers
+        end
+
         headers 'Access-Control-Allow-Origin' => origin,
           'Access-Control-Allow-Methods' => methods,
           'Access-Control-Allow-Credentials' => settings.allow_credentials.to_s,
